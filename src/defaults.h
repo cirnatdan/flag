@@ -1,0 +1,1 @@
+#define PKGSRCDIR	"/usr/pkgsrc"

@@ -2,60 +2,48 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include "pkgfind/pkgfind.h"
+#include "config.h"
 
-#define PKGSRCDIR	"/usr/pkgsrc"
+static void
+usage()
+{
+	(void)fprintf(stderr, "Usage: flag [command] [package1] [package2] ... \n");
+	exit(EXIT_FAILURE);
+}
 
-int
-main(int argc, char *argv[])
+static void
+handle_options(const char ***argv, int *argc)
 {
 	const char *path;
-	int ch, count = 0;
+	char *commands[] = {"--install", "--remove", "--search"};
+	char *command = NULL;
+	int ch, count = 0, i,j;
 
-	setprogname("flag");
-
-	/* default matches are partial matches */
-	match = partialmatch;
-	/* no special searches by default */
-	search = NULL;
-
-	cflag = qflag = 0;
-
-	while ((ch = getopt(argc, argv, "Ccn:Mqx")) != -1) {
-		switch (ch) {
-		case 'C':	/* search in comments */
-			search = "COMMENT";
-			break;
-		case 'c':	/* case sensitive */
-			cflag = 1;
-			break;
-		case 'n':
-			count = atoi(optarg);
-			break;
-		case 'M':	/* search for maintainer */
-			search = "MAINTAINER";
-			break;
-		case 'q':	/* quiet, don't output comment */
-			qflag = 1;
-			break;
-		case 'x':	/* exact matches */
-			match = exactmatch;
-			break;
-		default:
-			usage();
-			/* NOTREACHED */
-		}
-	}
-	argc -= optind;
-	argv += optind;
-
-	if (argc < 1)
+	if (*argc < 2)
 		usage();
 
-	if ((path = getenv("PKGSRCDIR")) == NULL)
-		path = PKGSRCDIR;
+	printf("number of arguments: %i \n", *argc);
+	for (i = 0; i < *argc; i++)
+	{
+		if (i == 1) {
+			for (j = 0; j < )
+		}
+		printf("argument %i: %s\n", i, (*argv)[i]);
+	}
 
-	for (; *argv != NULL; ++argv)
-		pkgfind(path, *argv, count);
+	path = flag_get_pkgsrc_path();
+
+	//for (; *argv != NULL; ++argv)
+	//	pkgfind(path, *argv, count);
+}
+
+int
+main(int argc, const char **argv)
+{
+	//setprogname("flag");
+	flag_load_config();
+
+	handle_options(&argv, &argc);
 
 	return 0;
 }

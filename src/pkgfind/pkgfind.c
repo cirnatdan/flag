@@ -232,7 +232,6 @@ exactmatch(const char *s, const char *find)
 void
 usage(void)
 {
-	(void)fprintf(stderr, "Usage: %s [-CcMqx] [-n number] keyword [...]\n",
-	    getprogname());
+	(void)fprintf(stderr, "Usage: flag [-CcMqx] [-n number] keyword [...]\n");
 	exit(EXIT_FAILURE);
 }
