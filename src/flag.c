@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include "pkgfind/pkgfind.h"
 #include "config.h"
+#include "commands/commands.h"
 
 static void
 usage()
@@ -15,26 +15,27 @@ static void
 handle_options(const char ***argv, int *argc)
 {
 	const char *path;
-	char *commands[] = {"--install", "--remove", "--search"};
-	char *command = NULL;
 	int ch, count = 0, i,j;
 
 	if (*argc < 2)
 		usage();
 
-	printf("number of arguments: %i \n", *argc);
-	for (i = 0; i < *argc; i++)
-	{
-		if (i == 1) {
-			for (j = 0; j < )
-		}
-		printf("argument %i: %s\n", i, (*argv)[i]);
-	}
-
 	path = flag_get_pkgsrc_path();
+	
+	if (strcmp((*argv)[1], "--install") == 0) {
+		printf("install command \n");
+	}
+	else if(strcmp((*argv)[1], "--search") == 0) {
+		printf("search command \n");
+		for (i = 2; i < *argc; i++) {
+			printf("pkg[%i]: %s\n", i, (*argv)[i]);
+			flag_search(path, (*argv)[i]);
+		}
 
-	//for (; *argv != NULL; ++argv)
-	//	pkgfind(path, *argv, count);
+	}
+	else if(strcmp((*argv)[1], "--remove") == 0) {
+		printf("remove command \n");	
+	}
 }
 
 int

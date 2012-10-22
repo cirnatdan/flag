@@ -1,15 +1,21 @@
+#include <stdlib.h>
 #include "defaults.h"
-#include "stdlib.h"
+
+#include <stdio.h>
+
 
 void 
 flag_load_config()
 {
 }
 
-char*
+const char*
 flag_get_pkgsrc_path()
 {
 	const char *path;
+
 	if ((path = getenv("PKGSRCDIR")) == NULL)
 		path = PKGSRCDIR;
+
+	return path;
 }

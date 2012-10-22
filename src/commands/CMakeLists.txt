@@ -1,0 +1,1 @@
+add_library(commands search.c)
