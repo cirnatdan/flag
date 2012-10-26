@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include "config.h"
-#include "commands/commands.h"
+#include "include/commands.h"
 
 static void
 usage()
