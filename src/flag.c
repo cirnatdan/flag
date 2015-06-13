@@ -23,10 +23,10 @@ handle_options(const char ***argv, int *argc)
 
 	path = flag_get_pkgsrc_path();
 	
-	if (strcmp((*argv)[1], "--install") == 0) {
+	if (strcmp((*argv)[1], "install") == 0) {
 		printf("install command \n");
 	}
-	else if(strcmp((*argv)[1], "--search") == 0) {
+	else if(strcmp((*argv)[1], "search") == 0) {
 		printf("search command \n");
 		for (i = 2; i < *argc; i++) {
 			printf("pkg[%i]: %s\n", i, (*argv)[i]);
@@ -34,8 +34,11 @@ handle_options(const char ***argv, int *argc)
 		}
 
 	}
-	else if(strcmp((*argv)[1], "--remove") == 0) {
+	else if(strcmp((*argv)[1], "remove") == 0) {
 		printf("remove command \n");	
+	}
+	else if(strcmp((*argv)[1], "options") == 0) {
+		printf("options command")
 	}
 }
 
