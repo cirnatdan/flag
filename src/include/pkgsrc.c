@@ -169,3 +169,13 @@ pkgsrc_install(const char *pkgsrc_path, struct package package)
 	system("bmake install clean clean-depends");
 }
 
+void
+pkgsrc_remove(const char *pkgsrc_path, struct package package)
+{
+	char package_dir[300];
+	snprintf(package_dir, sizeof(package_dir), "%s/%s", pkgsrc_path, package.path);
+
+	chdir(package_dir);
+	system("bmake deinstall");
+}
+

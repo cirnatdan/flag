@@ -45,7 +45,6 @@ install(const char ***package_names, int count, const char *pkgsrc_path)
 {
 	struct package packages[count];
 	struct package *search_result;
-//	packages = (struct package *)malloc(sizeof(struct package) * count);
 
 	for (int i = 0; i < count; i++) {
 		search_result = pkgsrc_search(pkgsrc_path, (*package_names)[i], 1, 0);
@@ -58,6 +57,26 @@ install(const char ***package_names, int count, const char *pkgsrc_path)
 
 	for (int i = 0; i < count; i++) {
 		pkgsrc_install(pkgsrc_path, packages[i]);
+	}
+}
+
+void
+remove_packages(const char ***package_names, int count, const char *pkgsrc_path)
+{
+	struct package packages[count];
+	struct package *search_result;
+
+	for (int i = 0; i < count; i++) {
+		search_result = pkgsrc_search(pkgsrc_path, (*package_names)[i], 1, 0);
+		if (strcmp(search_result[0].name, "") == 0) {
+			printf("Package %s not found! \n", (*package_names)[i]);
+			return;
+		}
+		packages[i] = search_result[0];
+	}
+
+	for (int i = 0; i < count; i++) {
+		pkgsrc_remove(pkgsrc_path, packages[i]);
 	}
 }
 
@@ -87,7 +106,9 @@ handle_options(const char ***argv, int *argc)
 		search(&(*argv), *argc, pkgsrc_path);
 	}
 	else if(strcmp(command, "remove") == 0) {
-		printf("remove command \n");	
+		(*argv)++;
+		(*argc)--;
+		remove_packages(&(*argv), *argc, pkgsrc_path);
 	}
 	else if(strcmp(command, "options") == 0) {
 		(*argv)++;
