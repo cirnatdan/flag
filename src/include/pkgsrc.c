@@ -1,4 +1,6 @@
 /*
+ * Contains adapted code from pkgfind
+ *
  * Copyright (c) 2004 Peter Postma <peter@pointless.nl>
  * All rights reserved.
  * 
@@ -34,6 +36,7 @@
 #include <stdio.h>
 #include <dirent.h>
 #include <string.h>
+#include <unistd.h>
 
 #if HAVE_NBCOMPAT_H
 #include <nbcompat.h>
@@ -41,13 +44,16 @@
 #include <err.h>
 #endif
 
+#include "pkgsrc.h"
+
 //GLOBAL VARIABLES
 const char * const skip[] = {
 	".", "..", "CVS", ".git", "bootstrap", "doc", "distfiles",
 	"licenses", "mk", "packages", NULL
 };
 
-int		(*match)(const char *, const char *);
+int		(*match)(const char *, const char *, int);
+
 
 static int
 checkskip(const struct dirent *dp)
@@ -61,7 +67,7 @@ checkskip(const struct dirent *dp)
 }
 
 int
-partialmatch(const char *s, const char *find)
+partialmatch(const char *s, const char *find, int case_sensitive)
 {
 	size_t len, n;
 
@@ -76,8 +82,17 @@ partialmatch(const char *s, const char *find)
 	return 0;
 }
 
-void 
-flag_search(const char *path, const char *pkg)
+static int
+exactmatch(const char *s, const char *find, int case_sensitive)
+{
+	if (case_sensitive)
+		return (strcmp(s, find) == 0);
+	else
+		return (strcasecmp(s, find) == 0);
+}
+
+struct package*
+pkgsrc_search(const char *pkgsrc_path, const char *package_name, int exact_match, int case_sensitive)
 {
 	struct dirent **category, **package_list = NULL;
 	int category_count, package_count;
@@ -86,14 +101,23 @@ flag_search(const char *path, const char *pkg)
 	char *text = NULL;
 	struct stat sb;
 
+	struct package temp_package;
+	struct package *packages;
+	int packages_found = 0;
+
+	packages = (struct package *)malloc(sizeof(struct package)*200);
+
 	match = partialmatch;
-	if ((category_count = scandir(path, &category, checkskip, alphasort)) < 0)
-		err(EXIT_FAILURE, "%s", path);
+	if (exact_match)
+		match = exactmatch;
+
+	if ((category_count = scandir(pkgsrc_path, &category, checkskip, alphasort)) < 0)
+		err(EXIT_FAILURE, "%s", pkgsrc_path);
 
 	int i,j;
-	printf("%d\n", category_count);
+//	printf("%d\n", category_count);
 	for (i = 0; i < category_count; i++) {
-		if (snprintf(tmp, sizeof(tmp), "%s/%s", path, category[i]->d_name)
+		if (snprintf(tmp, sizeof(tmp), "%s/%s", pkgsrc_path, category[i]->d_name)
 		    >= sizeof(tmp)) {
 			warnx("filename too long");
 			continue;
@@ -105,11 +129,43 @@ flag_search(const char *path, const char *pkg)
 			continue;
 		}
 		for (j = 0; j < package_count; j++) {
+			if (packages_found == 200) {
+				break;
+			}
 			text = package_list[j]->d_name;
-			if ((*match)(text, pkg)) {
-				printf("%s/%s\n", category[i]->d_name, package_list[j]->d_name);
+			if ((*match)(text, package_name, 0)) {
+				//printf("%s/%s\n", category[i]->d_name, package_list[j]->d_name);
+				strcpy(temp_package.name, package_list[j]->d_name);
+				snprintf(temp_package.path, sizeof(temp_package.path), "%s/%s", category[i]->d_name, package_list[j]->d_name);
+
+				packages[packages_found] = temp_package;
+				packages_found++;
 			}
 		}
 	}
+	//terminate array with NULL struct
+	strcpy(temp_package.name, "");
+	packages[packages_found + 1] = temp_package;
+	return packages;
+}
+
+void
+pkgsrc_options(const char *pkgsrc_path, struct package package)
+{
+	char package_dir[300];
+	snprintf(package_dir, sizeof(package_dir), "%s/%s", pkgsrc_path, package.path);
+
+	chdir(package_dir);
+	system("bmake show-options");
+}
+
+void
+pkgsrc_install(const char *pkgsrc_path, struct package package)
+{
+	char package_dir[300];
+	snprintf(package_dir, sizeof(package_dir), "%s/%s", pkgsrc_path, package.path);
+
+	chdir(package_dir);
+	system("bmake install clean clean-depends");
 }
 

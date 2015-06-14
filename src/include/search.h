@@ -1,1 +1,0 @@
-void flag_search(const char *, const char *);
