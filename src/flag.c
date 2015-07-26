@@ -41,6 +41,18 @@ print_options(const char *package_name, const char *pkgsrc_path)
 }
 
 void
+print_dependencies(const char *package_name, const char *pkgsrc_path)
+{
+	struct package *packages;
+	packages = pkgsrc_search(pkgsrc_path, package_name, 1, 0);
+	if (strcmp(packages[0].name, "") == 0 ) {
+		printf("Package not found! \n");
+		return;
+	}
+	pkgsrc_dependencies(pkgsrc_path, packages[0]);
+}
+
+void
 install(const char ***package_names, int count, const char *pkgsrc_path)
 {
 	struct package packages[count];
@@ -114,6 +126,11 @@ handle_options(const char ***argv, int *argc)
 		(*argv)++;
 		(*argc)--;
 		print_options((*argv)[0], pkgsrc_path);
+	}
+	else if(strcmp(command, "dependencies") == 0) {
+		(*argv)++;
+		(*argc)--;
+		print_dependencies((*argv)[0], pkgsrc_path);
 	}
 }
 

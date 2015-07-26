@@ -179,3 +179,12 @@ pkgsrc_remove(const char *pkgsrc_path, struct package package)
 	system("bmake deinstall");
 }
 
+void
+pkgsrc_dependencies(const char *pkgsrc_path, struct package package)
+{
+	char package_dir[300];
+	snprintf(package_dir, sizeof(package_dir), "%s/%s", pkgsrc_path, package.path);
+
+	chdir(package_dir);
+	system("bmake show-depends");
+}
