@@ -7,9 +7,9 @@ macOS and others.
 **flag** wraps existing pkgsrc tools and make targets in convenient subcommands: 
 * `flag search tmux` - search for package *tmux*, equivalent of `pkgfind tmux`
 * `flag install tmux` - install package *tmux*, wrapper for `cd /usr/pkgsrc/misc/tmux && make install clean clean-depends`
-* `flag remove tmux` - wrapper for `make deinstall`
-* `flag options tmux` - wrapper for `make show-options`
-* `flag dependencies tmux` - wrapper for `make show-depends` 
+* `flag remove tmux` - wrapper for `[...] make deinstall`
+* `flag options tmux` - wrapper for `[...] make show-options`
+* `flag dependencies tmux` - wrapper for `[...] make show-depends` 
 
 # Building
 flag is developed on systems with an existing pkgsrc installation.
