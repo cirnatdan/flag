@@ -18,7 +18,6 @@ search(const char ***search_strings, int count, const char *pkgsrc_path)
 	struct package *packages;
 	int i, j = 0;
 	for (i = 0; i < count; i++) {
-		//printf("pkg[%i]: %s\n", i - 1, (*argv)[i]);
 		packages = pkgsrc_search(pkgsrc_path, (*search_strings)[i], 0, 0);
 
 		while(strcmp(packages[j].name, "") != 0) {
