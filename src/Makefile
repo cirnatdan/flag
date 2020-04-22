@@ -10,4 +10,6 @@ MAN=
 
 DPLIBS+=	libc
 
+CLEANFILES+=	*.o
+
 .include <bsd.prog.mk>
