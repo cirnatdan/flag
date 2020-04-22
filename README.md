@@ -2,14 +2,16 @@ flag is a frontend for pkgsrc
 
 # Building
 flag is developed on systems with an existing pkgsrc installation.
-Requires at minimum NetBSD's [make](https://pkgsrc.se/devel/bmake) and C compiler to build
+Requires at minimum NetBSD's [make](https://pkgsrc.se/devel/bmake) and a C compiler to build
 
-```NetBSD
+## NetBSD
+```
 make
 PREFIX=/usr/local make install
 ```
 
-```Other OS
+## Other OS
+```
 bmake
 PREFIX=/usr/local bmake install
 ```
