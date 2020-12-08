@@ -1,4 +1,4 @@
-**flag** is a frontend for [pkgsrc](), a portable package build system. The goal is to
+**flag** is a frontend for [pkgsrc](https://pkgsrc.org), a portable package build system. The goal is to
 have a tool similar to what `emerge` is for `Portage` or `yaourt` is for `AUR`.
 It should work on most platforms supported by `pkgsrc`, including NetBSD, Linux,
 macOS and others.
