@@ -156,7 +156,7 @@ pkgsrc_options(const char *pkgsrc_path, struct package package)
 	snprintf(package_dir, sizeof(package_dir), "%s/%s", pkgsrc_path, package.path);
 
 	chdir(package_dir);
-	system("bmake show-options");
+	system("MAKE show-options");
 }
 
 void
@@ -166,7 +166,7 @@ pkgsrc_install(const char *pkgsrc_path, struct package package)
 	snprintf(package_dir, sizeof(package_dir), "%s/%s", pkgsrc_path, package.path);
 
 	chdir(package_dir);
-	system("bmake install clean clean-depends");
+	system("MAKE install clean clean-depends");
 }
 
 void
@@ -176,7 +176,7 @@ pkgsrc_remove(const char *pkgsrc_path, struct package package)
 	snprintf(package_dir, sizeof(package_dir), "%s/%s", pkgsrc_path, package.path);
 
 	chdir(package_dir);
-	system("bmake deinstall");
+	system("MAKE deinstall");
 }
 
 void
@@ -186,5 +186,5 @@ pkgsrc_dependencies(const char *pkgsrc_path, struct package package)
 	snprintf(package_dir, sizeof(package_dir), "%s/%s", pkgsrc_path, package.path);
 
 	chdir(package_dir);
-	system("bmake show-depends");
+	system("MAKE show-depends");
 }

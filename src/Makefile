@@ -13,3 +13,5 @@ DPLIBS+=	libc
 CLEANFILES+=	*.o
 
 .include <bsd.prog.mk>
+
+CFLAGS=	-DMAKE=${MAKE}
