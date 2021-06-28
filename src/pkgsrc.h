@@ -1,3 +1,5 @@
+#include "defaults.h"
+
 struct package {
     char name[50];
     char description[250];

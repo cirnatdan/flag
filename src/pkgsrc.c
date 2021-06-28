@@ -52,6 +52,14 @@ const char * const skip[] = {
 	"licenses", "mk", "packages", NULL
 };
 
+#define QUOTE(s) #s
+#define STR(s) QUOTE(s)
+
+#define PKGSRC_INSTALL STR(MAKE) " install clean clean-depends"
+#define PKGSRC_REPLACE STR(MAKE) " replace clean clean-depends"
+#define PKGSRC_OPTIONS STR(MAKE) " show-options"
+#define PKGSRC_DEPENDS STR(MAKE) " show-depends"
+#define PKGSRC_REMOVE STR(MAKE) " deinstall"
 int		(*match)(const char *, const char *, int);
 
 
@@ -156,7 +164,7 @@ pkgsrc_options(const char *pkgsrc_path, struct package package)
 	snprintf(package_dir, sizeof(package_dir), "%s/%s", pkgsrc_path, package.path);
 
 	chdir(package_dir);
-	system("MAKE show-options");
+	system(PKGSRC_OPTIONS);
 }
 
 void
@@ -166,7 +174,7 @@ pkgsrc_install(const char *pkgsrc_path, struct package package)
 	snprintf(package_dir, sizeof(package_dir), "%s/%s", pkgsrc_path, package.path);
 
 	chdir(package_dir);
-	system("MAKE install clean clean-depends");
+	system(PKGSRC_INSTALL);
 }
 
 void
@@ -176,7 +184,7 @@ pkgsrc_remove(const char *pkgsrc_path, struct package package)
 	snprintf(package_dir, sizeof(package_dir), "%s/%s", pkgsrc_path, package.path);
 
 	chdir(package_dir);
-	system("MAKE deinstall");
+	system(PKGSRC_REMOVE);
 }
 
 void
@@ -186,5 +194,5 @@ pkgsrc_dependencies(const char *pkgsrc_path, struct package package)
 	snprintf(package_dir, sizeof(package_dir), "%s/%s", pkgsrc_path, package.path);
 
 	chdir(package_dir);
-	system("MAKE show-depends");
+	system(PKGSRC_DEPENDS);
 }
